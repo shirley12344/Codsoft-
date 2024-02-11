@@ -1,0 +1,198 @@
+//Task 1
+import java.util.Random;
+import java.util.Scanner;
+
+public class NumberGame {
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+        Random random = new Random();
+        int minRange = 1;
+        int maxRange = 500;
+        int attempts = 5; 
+        int score = 0;
+        boolean playAgain = true;
+
+        System.out.println("Welcome to Guess the Number Game!");
+
+        while (playAgain) {
+            int generatedNumber = random.nextInt(maxRange - minRange + 1) + minRange;
+            System.out.println("I've picked a number between " + minRange + " and " + maxRange + ". Guess it!");
+
+            int attemptCount = 0;
+            boolean guessedCorrectly = false;
+
+            while (attemptCount < attempts && !guessedCorrectly) {
+                System.out.print("Enter your guess: ");
+                int userGuess = scanner.nextInt();
+                attemptCount++;
+
+                if (userGuess == generatedNumber) {
+                    System.out.println("Congratulations! You've guessed the correct number" + attemptCount + " attempts.");
+                    score++;
+                    guessedCorrectly = true;
+                } else if (userGuess < generatedNumber) {
+                    System.out.println("Too low number. Try again.");
+                } else {
+                    System.out.println("Too high number. Try again.");
+                }
+            }
+
+            if (!guessedCorrectly) {
+                System.out.println("Sorry, you've run out of attempts. The number was: " + generatedNumber);
+            }
+
+            System.out.print("Do you want to play again? (yes/no): ");
+            String playChoice = scanner.next();
+            playAgain = playChoice.equalsIgnoreCase("yes");
+        }
+
+        System.out.println("Game Over! Your score is: " + score);
+        scanner.close();
+    }
+}
+
+
+
+
+//Task 2
+import java.util.Scanner;
+
+public class Calculator {
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+
+        System.out.println("Enter the number of subjects:");
+        int numSubjects = scanner.nextInt();
+
+        int totalMarks = 0;
+        for (int i = 1; i <= numSubjects; i++) {
+            System.out.println("Enter marks obtained in subject " + i + ":");
+            int marks = scanner.nextInt();
+            totalMarks += marks;
+        }
+
+        double averagePercentage = totalMarks / numSubjects;
+
+        System.out.println("Total Marks: " + totalMarks);
+        System.out.printf("Average Percentage:"+averagePercentage);
+
+        char grade;
+        if (averagePercentage >= 90) {
+            grade = 'A';
+        } else if (averagePercentage >= 80) {
+            grade = 'B';
+        } else if (averagePercentage >= 70) {
+            grade = 'C';
+        } else if (averagePercentage >= 60) {
+            grade = 'D';
+        } else if (averagePercentage >= 50) {
+            grade = 'E';
+        } else {
+            grade = 'F';
+        }
+
+        System.out.println("Grade: " + grade);
+
+        scanner.close();
+    }
+}
+
+//Task 3
+import java.util.Scanner;
+
+class Account {
+    private double balance;
+
+    public BankAccount(double initialBalance) {
+        this.balance = initialBalance;
+    }
+
+    public double getBalance() {
+        return balance;
+    }
+
+    public void deposit(double amount) {
+        balance += amount;
+    }
+
+    public boolean withdraw(double amount) {
+        if (amount <= balance) {
+            balance -= amount;
+            return true;
+        } else {
+            return false;
+        }
+    }
+}
+
+public class ATM {
+    private Account account;
+    private Scanner scanner;
+
+    public ATM(Account account) {
+        this.account = account;
+        this.scanner = new Scanner(System.in);
+    }
+
+    public void displayMenu() {
+        System.out.println("Welcome to the ATM");
+        System.out.println("1. Withdraw");
+        System.out.println("2. Deposit");
+        System.out.println("3. Check Balance");
+        System.out.println("4. Exit");
+    }
+
+    public void withdraw(double amount) {
+        if (account.withdraw(amount)) {
+            System.out.println("Withdrawal successful. Remaining balance: " + account.getBalance());
+        } else {
+            System.out.println("Insufficient funds. Withdrawal failed.");
+        }
+    }
+
+    public void deposit(double amount) {
+        account.deposit(amount);
+        System.out.println("Deposit successful. Updated balance: " + account.getBalance());
+    }
+
+    public void checkBalance() {
+        System.out.println("Current Balance: " + account.getBalance());
+    }
+
+    public void start() {
+        int choice = 0;
+        while (choice != 4) {
+            displayMenu();
+            System.out.print("Enter your choice: ");
+            choice = scanner.nextInt();
+            switch (choice) {
+                case 1:
+                    System.out.print("Enter withdrawal amount: ");
+                    double withdrawAmount = scanner.nextDouble();
+                    withdraw(withdrawAmount);
+                    break;
+                case 2:
+                    System.out.print("Enter deposit amount: ");
+                    double depositAmount = scanner.nextDouble();
+                    deposit(depositAmount);
+                    break;
+                case 3:
+                    checkBalance();
+                    break;
+                case 4:
+                    System.out.println("Exiting. Thank you for using the ATM.");
+                    break;
+                default:
+                    System.out.println("Invalid choice. Please try again.");
+                    break;
+            }
+        }
+    }
+
+    public static void main(String[] args) {
+        Account account = new Account(1000); 
+        ATM atm = new ATM(account);
+        atm.start();
+    }
+}
+
